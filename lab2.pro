@@ -18,11 +18,11 @@ clauses
     s(0).
 
 class predicates
-    кто_купил : (string Id_товара) nondeterm.
-    товары : (category Категория) nondeterm.
-    продано_когда : (string Дата) nondeterm.
-    покупал_клиент : (string Имя_клиента) nondeterm.
-    выручка_в_опред_день : (string Дата) nondeterm.
+    кто_купил : (string Id_товара) failure.
+    товары : (category Категория) failure.
+    продано_когда : (string Дата) failure.
+    покупал_клиент : (string Имя_клиента) determ.
+    выручка_в_опред_день : (string Дата) determ.
 
 clauses
     %Правило. Кто купил данный товар
@@ -69,7 +69,8 @@ clauses
         покупка(Y, _, _, _),
         write("Да, данный клиент совершал у нас покупку\n"),
         nl,
-        fail.
+        !.
+
     покупал_клиент(X) :-
         покупка(_, _, _, X),
         write("\n"),
@@ -89,7 +90,8 @@ clauses
         s(Sum),
         write("Выручка за день составила ", Sum, " рублей.\n"),
         nl,
-        fail.
+        !.
+
     выручка_в_опред_день(X) :-
         покупка(_, _, _, X),
         write("\n"),
@@ -100,22 +102,19 @@ clauses
         console::init(),
         reconsult("..\\data.txt", shop),
         write("Правило: Кто купил данный товар\n"),
-        кто_купил("Смартфон Apple iPhone 14 Pro"),
-        fail.
+        кто_купил("Смартфон Apple iPhone 14 Pro").
 
     run() :-
         console::init(),
         reconsult("..\\data.txt", shop),
         write("Правило: Вывод товаров определенной категории\n"),
-        товары(смартфоны),
-        fail.
+        товары(смартфоны).
 
     run() :-
         console::init(),
         reconsult("..\\data.txt", shop),
         write("Правило: Список товаров проданных в определенный день\n"),
-        продано_когда("03.03.2023"),
-        fail.
+        продано_когда("03.03.2023").
 
     run() :-
         console::init(),
